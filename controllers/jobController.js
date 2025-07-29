@@ -28,3 +28,14 @@ exports.createJob = async (req , res) => {
         res.status(500).json({message: err.message });
     }
 }
+
+// Select jobs
+exports.getAllJobs = async (req , res) => {
+    try{
+        const jobs = await Job.find();
+        res.status(200).json(jobs);
+    }
+    catch(err){
+        res.status(500).json({message: err.message});
+    }
+}

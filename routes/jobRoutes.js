@@ -5,4 +5,7 @@ const router = express.Router();
 // Route to create a new Job
 router.post('/jobs', jobController.createJob);
 
+// Route to Select Jobs
+router.get('/jobs', jobController.getAllJobs);
+
 module.exports = router;
