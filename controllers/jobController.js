@@ -39,3 +39,17 @@ exports.getAllJobs = async (req , res) => {
         res.status(500).json({message: err.message});
     }
 }
+
+// Get a specific Job
+exports.getById = async (req , res) => {
+    try{
+        const job = await Job.findById(req.params.id); // find it in the end of the URI
+        if(!job){
+            return res.status(404).json({message: "Job not Found!"});
+        }
+        res.status(200).json(job);
+    }
+    catch(err){
+        res.status(500).json({message: err.message});
+    }
+}
