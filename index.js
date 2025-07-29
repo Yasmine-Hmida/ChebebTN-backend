@@ -3,6 +3,7 @@ const express = require("express");    // Importer ExpressJS
 const dotenv = require('dotenv');      
 const mongoose = require("mongoose");  // Importer la biblio pour l'interaction avec mongoDB.
 const jobRoutes = require("./routes/jobRoutes");
+const blogRoutes = require("./routes/blogRoutes");
 
 
 // Création d'une application Express
@@ -42,6 +43,9 @@ app.get('/job' , (req , res) => {
 
 // Activer les routes de job
 app.use('/api', jobRoutes);
+
+// Activer les routes de blog
+app.use('/api', blogRoutes);
 
 
 // Partie Port
