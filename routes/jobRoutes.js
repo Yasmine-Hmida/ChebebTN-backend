@@ -11,4 +11,9 @@ router.get('/jobs', jobController.getAllJobs);
 // Route to getSpecificJob
 router.get('/jobs/:id', jobController.getById);
 
+// Route to delete a job
+router.delete('/jobs/:id', jobController.deleteJob);
+
+// Route to Update
+
 module.exports = router;
