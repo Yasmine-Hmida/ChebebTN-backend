@@ -69,3 +69,22 @@ exports.deleteJob = async (req, res) => {
 }
 
 // Update a job
+exports.updateJob = async (req, res) => {
+    const {title , company , description , salary , location , jobType , 
+           status , experienceLevel , skills , applicationDeadline} = req.body; // Vérification des données
+    try{
+        const job = await Job.findByIdAndUpdate(
+            req.params.id,
+            {title , company , description , salary , location , jobType , 
+            status , experienceLevel , skills , applicationDeadline},
+            {new:true}
+        );
+        if(!job){
+            return res.status(404).json({message: "Job not Found!"});
+        }
+        res.status(200).json(job);
+    }
+    catch(err){
+        res.status(500).json({message: err.message});
+    }
+}
