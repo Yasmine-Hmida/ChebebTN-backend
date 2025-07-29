@@ -1,15 +1,26 @@
 // Importation Importants
 const express = require("express");    // Importer ExpressJS
-require('dotenv').config();            // Loads .env file contents into process.env by default
+const dotenv = require('dotenv');      
 const mongoose = require("mongoose");  // Importer la biblio pour l'interaction avec mongoDB.
 
 
 // Création d'une application Express
 const app = express();
+dotenv.config(); // Loads .env file contents into process.env by default
 
 
 // express.json() sert à lire automatiquement les données JSON envoyées par le client dans req.body(comme POST ou PUT)
 app.use(express.json()); // On a choisi json car on utilise mongodb(orienté document)
+
+
+// Connect to mongoDB
+mongoose
+    .connect(process.env.MONGO_URI, { // MONGO_URI: Variable d'environnement qui a l'URL de la BD.
+      useNewUrlParser: true,    // Pour l'analyse (le Parsing) de l'url de MONGO_URI
+      useUnifiedTopology: true, // Activer le moteur de gestion de connexion
+    })
+    .then(() => console.log("MongoDB Connected!"))
+    .catch((err) => console.log(err));
 
 
 // Création des routes GET
@@ -27,16 +38,6 @@ app.get('/job' , (req , res) => {
         {id:2 , title: "Data Scientist" , company: "Data Inc"}
     ])
 });
-
-
-// Connect to mongoDB
-mongoose
-    .connect(process.env.MONGO_URI, { // MONGO_URI: Variable d'environnement qui a l'URL de la BD.
-      useNewUrlParser: true,    // Pour l'analyse (le Parsing) de l'url de MONGO_URI
-      useUnifiedTopology: true, // Activer le moteur de gestion de connexion
-    })
-    .then(() => console.log("MongoDB Connected!"))
-    .catch((err) => console.log(err));
 
 
 // Partie Port
