@@ -21,7 +21,7 @@ exports.createJob = async (req , res) => {
             applicationDeadline
         });
 
-        const savedJob = await newJob.save();
+        const savedJob = await newJob.save(); // Enregistrement dans la bd
         res.status(201).json(savedJob);
     }
     catch(err){

@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const mongoose = require("mongoose");  // Importer la biblio pour l'interaction avec mongoDB.
 const jobRoutes = require("./routes/jobRoutes");
 const blogRoutes = require("./routes/blogRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 
 // Création d'une application Express
@@ -46,6 +47,9 @@ app.use('/api', jobRoutes);
 
 // Activer les routes de blog
 app.use('/api', blogRoutes);
+
+// Activer les routes de user
+app.use('/api', userRoutes);
 
 
 // Partie Port

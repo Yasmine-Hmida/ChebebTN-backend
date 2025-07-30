@@ -2,7 +2,7 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const { isValidEmail } = require("../middleware/UserValidation");
-require('dotenv').config();
+require('dotenv').config(); // To get JWT_SECRET (Secret key)
 
 // @desc  Register a new user
 // @route POST /api/register
@@ -36,8 +36,10 @@ exports.registerUser = async (req , res) => {
         }
 
         // Hash Password before saving it and create the User
-        const hashedPassword = await bcrypt.hash(password , 10);
-        let user = await User.create({username , email , password: hashedPassword}); // We store it in the Database
+        const hashedPassword = await bcrypt.hash(password , 10); // 10: how many times you're gonna hash it before returning it
+
+        // We store the user in the Database
+        let user = await User.create({username , email , password: hashedPassword}); 
 
         return res.status(201).json({
             status: "Success",
@@ -45,8 +47,6 @@ exports.registerUser = async (req , res) => {
         });
     }
     catch(err){
-        console.log(err.message);
-
         return res.status(500).json({
             status: 'error',
             message: err.message
