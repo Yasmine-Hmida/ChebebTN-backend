@@ -2,7 +2,6 @@ const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const { isValidEmail } = require("../middleware/UserValidation");
-const User = require("../models/User");
 require('dotenv').config();
 
 // @desc  Register a new user
