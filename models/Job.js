@@ -44,6 +44,12 @@ const jobSchema = new mongoose.Schema(  // = table in SQL
             type:Date,
             required:true
         },
+        applications:[
+            {
+                userId: {type:mongoose.Schema.Types.ObjectId , ref:"User"},
+                appliedAt:{type:Date , default:Date.now},
+            },
+        ],
         postedBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",

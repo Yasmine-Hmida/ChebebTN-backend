@@ -19,4 +19,7 @@ router.delete('/jobs/:id', authorizeRole("Admin") ,jobController.deleteJob);
 router.put('/jobs/:id', authorizeRole("Admin") ,jobController.updateJob); 
 // el admin eli ya3mel el create houwa bidou ya3mel update (y9aren bel id)
 
+// Route to apply to a job
+router.post("/jobs/:id/apply" , authorizeRole("JobSeeker") ,jobController.applyForJob);
+
 module.exports = router;

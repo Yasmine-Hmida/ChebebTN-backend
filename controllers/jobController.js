@@ -90,3 +90,27 @@ exports.updateJob = async (req, res) => {
         res.status(500).json({message: err.message});
     }
 }
+
+// Apply for job
+exports.applyForJob = async (req, res) => {
+    try{
+        const job = await Job.findById(req.params.id);
+        if(!job){
+            return res.status(400).json({message: "Job not found!"});
+        }
+
+        if (job.status === "Closed"){
+            return res.status(400).json({message: "Sorry, Job applications are closed!"});
+        }
+
+        if(!job.applications) job.applications = [];
+
+        job.applications.push({userId: req.user.id , appliedAt: new Date() });
+        await job.save();
+
+        res.status(200).json({message: "Application submitted successfully!"});
+    }
+    catch(err){
+        res.status(500).json({message: err.message});
+    }
+}
