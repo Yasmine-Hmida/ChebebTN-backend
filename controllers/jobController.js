@@ -1,5 +1,8 @@
 // CRUD for Job.js
 
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+
 // Importer jobSchema
 const Job = require("../models/Job")
 
@@ -74,17 +77,43 @@ exports.deleteJob = async (req, res) => {
 exports.updateJob = async (req, res) => {
     const {title , company , description , salary , location , jobType , 
            status , experienceLevel , skills , applicationDeadline} = req.body; // Vérification des données
+    
     try{
-        const job = await Job.findByIdAndUpdate(
-            req.params.id,
-            {title , company , description , salary , location , jobType , 
-            status , experienceLevel , skills , applicationDeadline},
-            {new:true}
-        );
+        const job = await Job.findById(req.params.id).select("postedBy"); // Get the Id of who posted this job
         if(!job){
             return res.status(404).json({message: "Job not Found!"});
         }
-        res.status(200).json(job);
+
+        const token = req.headers["authorization"]?.split(" ")[1]; // Take the token passed in postman
+        if(!token) return res.status(401).json({message: "No token provided!"});
+
+        // Decode the token
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        
+        // Check if who posted the job is the one that wants to update the job
+        if(decoded.id !== job.postedBy.toString()){
+            return res.status(401).json({
+                status: 'Error',
+                message: "Unauthorizd Update"
+            })
+        }
+
+        // Else, we now update
+        const jobToUpdate = await Job.findById(req.params.id);
+        
+        jobToUpdate.title = title || jobToUpdate.title;
+        jobToUpdate.company = company || jobToUpdate.company;
+        jobToUpdate.description = description || jobToUpdate.description;
+        jobToUpdate.salary = salary || jobToUpdate.salary;
+        jobToUpdate.location = location || jobToUpdate.location;
+        jobToUpdate.jobType = jobType || jobToUpdate.jobType;
+        jobToUpdate.status = status || jobToUpdate.status;
+        jobToUpdate.experienceLevel = experienceLevel || jobToUpdate.experienceLevel;
+        jobToUpdate.skills = skills || jobToUpdate.skills;
+        jobToUpdate.applicationDeadline = applicationDeadline || jobToUpdate.applicationDeadline;
+
+        const savedJob = await jobToUpdate.save(); 
+        res.status(200).json(savedJob);
     }
     catch(err){
         res.status(500).json({message: err.message});
@@ -96,7 +125,7 @@ exports.applyForJob = async (req, res) => {
     try{
         const job = await Job.findById(req.params.id);
         if(!job){
-            return res.status(400).json({message: "Job not found!"});
+            return res.status(404).json({message: "Job not found!"});
         }
 
         if (job.status === "Closed"){
@@ -105,7 +134,7 @@ exports.applyForJob = async (req, res) => {
 
         if(!job.applications) job.applications = [];
 
-        job.applications.push({userId: req.user.id , appliedAt: new Date() });
+        job.applications.push({ userId: req.user.id , appliedAt: new Date() });
         await job.save();
 
         res.status(200).json({message: "Application submitted successfully!"});

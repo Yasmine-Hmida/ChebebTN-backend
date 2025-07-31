@@ -16,8 +16,7 @@ router.get('/jobs/:id', jobController.getById);
 router.delete('/jobs/:id', authorizeRole("Admin") ,jobController.deleteJob);
 
 // Route to Update
-router.put('/jobs/:id', authorizeRole("Admin") ,jobController.updateJob); 
-// el admin eli ya3mel el create houwa bidou ya3mel update (y9aren bel id)
+router.put('/jobs/:id',jobController.updateJob); 
 
 // Route to apply to a job
 router.post("/jobs/:id/apply" , authorizeRole("JobSeeker") ,jobController.applyForJob);
