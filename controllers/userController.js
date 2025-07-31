@@ -10,7 +10,7 @@ require('dotenv').config(); // To get JWT_SECRET (Secret key)
 // Sign Up Functionality
 exports.registerUser = async (req , res) => {
     try{
-        const {username , email , password , repeatPassword} = req.body;
+        const {username , email , password , repeatPassword , role} = req.body;
         const existingUser = await User.findOne({email});
         
         // Vérification
@@ -39,7 +39,7 @@ exports.registerUser = async (req , res) => {
         const hashedPassword = await bcrypt.hash(password , 10); // 10: how many times you're gonna hash it before returning it
 
         // We store the user in the Database
-        let user = await User.create({username , email , password: hashedPassword}); 
+        let user = await User.create({username , email , password: hashedPassword, role: role || "JobSeeker"}); 
 
         return res.status(201).json({
             status: "Success",
@@ -78,13 +78,14 @@ exports.loginUser = async (req , res) => {
     }
 
     // Create a token and send it to the client
-    const token = jwt.sign({id: user._id} , process.env.JWT_SECRET , {expiresIn: '24h'});
+    const token = jwt.sign({id: user._id, role:user.role} , process.env.JWT_SECRET , {expiresIn: '24h'});
 
     res.json({
         status:"Success", 
         result: {
             token,
-            userId: user._id
+            userId: user._id,
+            role:user.role
         },
         message: "Logged in successfully!"
     });
