@@ -18,7 +18,8 @@ exports.createJob = async (req , res) => {
             status,
             experienceLevel,
             skills,
-            applicationDeadline
+            applicationDeadline,
+            postedBy: req.user.id // Add the ID of the admin who created the job 
         });
 
         const savedJob = await newJob.save(); // Enregistrement dans la bd
@@ -43,7 +44,8 @@ exports.getAllJobs = async (req , res) => {
 // Get a specific Job
 exports.getById = async (req , res) => {
     try{
-        const job = await Job.findById(req.params.id); // find it in the end of the URI
+        // .populate: Bring me not just the ID, but the actual object it points to
+        const job = await Job.findById(req.params.id).populate("postedBy" , "username email"); // find it in the end of the URI
         if(!job){
             return res.status(404).json({message: "Job not Found!"});
         }

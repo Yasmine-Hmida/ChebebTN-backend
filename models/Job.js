@@ -43,6 +43,11 @@ const jobSchema = new mongoose.Schema(  // = table in SQL
         applicationDeadline:{
             type:Date,
             required:true
+        },
+        postedBy: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true
         }
     }, 
     {timestamps: true} // Pour enregistrer la date de création et de modification
