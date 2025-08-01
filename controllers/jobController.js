@@ -48,7 +48,7 @@ exports.getAllJobs = async (req , res) => {
 exports.getById = async (req , res) => {
     try{
         // .populate: Bring me not just the ID, but the actual object it points to
-        const job = await Job.findById(req.params.id).populate("postedBy" , "username email"); // find it in the end of the URI
+        const job = await Job.findById(req.params.id).populate("postedBy" , "username email"); // req.params.id: find it in the end of the URI
         if(!job){
             return res.status(404).json({message: "Job not Found!"});
         }
@@ -84,14 +84,8 @@ exports.updateJob = async (req, res) => {
             return res.status(404).json({message: "Job not Found!"});
         }
 
-        const token = req.headers["authorization"]?.split(" ")[1]; // Take the token passed in postman
-        if(!token) return res.status(401).json({message: "No token provided!"});
-
-        // Decode the token
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        
         // Check if who posted the job is the one that wants to update the job
-        if(decoded.id !== job.postedBy.toString()){
+        if(req.user.id !== job.postedBy.toString()){
             return res.status(401).json({
                 status: 'Error',
                 message: "Unauthorizd Update"
@@ -99,21 +93,23 @@ exports.updateJob = async (req, res) => {
         }
 
         // Else, we now update
-        const jobToUpdate = await Job.findById(req.params.id);
-        
-        jobToUpdate.title = title || jobToUpdate.title;
-        jobToUpdate.company = company || jobToUpdate.company;
-        jobToUpdate.description = description || jobToUpdate.description;
-        jobToUpdate.salary = salary || jobToUpdate.salary;
-        jobToUpdate.location = location || jobToUpdate.location;
-        jobToUpdate.jobType = jobType || jobToUpdate.jobType;
-        jobToUpdate.status = status || jobToUpdate.status;
-        jobToUpdate.experienceLevel = experienceLevel || jobToUpdate.experienceLevel;
-        jobToUpdate.skills = skills || jobToUpdate.skills;
-        jobToUpdate.applicationDeadline = applicationDeadline || jobToUpdate.applicationDeadline;
-
-        const savedJob = await jobToUpdate.save(); 
-        res.status(200).json(savedJob);
+        const jobToUpdate = await Job.findByIdAndUpdate(
+            req.params.id,
+            {
+                title, 
+                company, 
+                description, 
+                salary, 
+                location, 
+                jobType,
+                status, 
+                experienceLevel, 
+                skills, 
+                applicationDeadline
+            },
+            {new: true}
+        );
+        res.status(200).json(jobToUpdate);
     }
     catch(err){
         res.status(500).json({message: err.message});

@@ -15,8 +15,8 @@ router.get('/jobs/:id', jobController.getById);
 // Route to delete a job
 router.delete('/jobs/:id', authorizeRole("Admin") ,jobController.deleteJob);
 
-// Route to Update
-router.put('/jobs/:id',jobController.updateJob); 
+// Route to Update a job
+router.put('/jobs/:id',authorizeRole("Admin"),jobController.updateJob); 
 
 // Route to apply to a job
 router.post("/jobs/:id/apply" , authorizeRole("JobSeeker") ,jobController.applyForJob);
