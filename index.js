@@ -1,5 +1,6 @@
 // Importation Importants
 const express = require("express");    // Importer ExpressJS
+const cors = require("cors");    // Importer cors
 const dotenv = require('dotenv');      
 const mongoose = require("mongoose");  // Importer la biblio pour l'interaction avec mongoDB.
 const jobRoutes = require("./routes/jobRoutes");
@@ -13,6 +14,7 @@ dotenv.config(); // Loads .env file contents into process.env by default
 
 
 // express.json() sert à lire automatiquement les données JSON envoyées par le client dans req.body(comme POST ou PUT)
+app.use(cors());  // enable cors for all routes (no conditions)
 app.use(express.json()); // On a choisi json car on utilise mongodb(orienté document)
 
 
@@ -51,6 +53,7 @@ app.use('/api', blogRoutes);
 // Activer les routes de user
 app.use('/api', userRoutes);
 
+// app.get() : route wa7da w app.use(): plusieurs routes.
 
 // Partie Port
 const PORT = process.env.PORT || 3000; 
