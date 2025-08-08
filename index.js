@@ -37,7 +37,7 @@ app.get('/', (req , res) => {    // req = request / res = response
     res.send("API is running!"); // Envoi d'un texte brut plain à postman
 });
 
-app.get('/job' , (req , res) => {
+app.get('/job' , (req , res) => { // app.get(): to load a single route
     res.json([
         {id:1 , title: "Software Engineer" , company: "Tech Corp"},
         {id:2 , title: "Data Scientist" , company: "Data Inc"}
@@ -45,7 +45,7 @@ app.get('/job' , (req , res) => {
 });
 
 // Activer les routes de job
-app.use('/api', jobRoutes);
+app.use('/api', jobRoutes); // app.use(): to load many routes.
 
 // Activer les routes de blog
 app.use('/api', blogRoutes);
@@ -53,7 +53,6 @@ app.use('/api', blogRoutes);
 // Activer les routes de user
 app.use('/api', userRoutes);
 
-// app.get() : route wa7da w app.use(): plusieurs routes.
 
 // Partie Port
 const PORT = process.env.PORT || 3000; 
