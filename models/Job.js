@@ -30,7 +30,7 @@ const jobSchema = new mongoose.Schema(  // = table in SQL
         status:{
             type:String,
             enum:["Open", "Closed"],
-            default:"open"
+            default:"Open"
         },
         experienceLevel:{
             type:String,
