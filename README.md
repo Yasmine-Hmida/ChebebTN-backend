@@ -6,12 +6,12 @@ This is the backend part of **ChebebTN** built with the **MERN Stack** (Node.js,
 
 ## Tech Stack
 
-- **Node.js** – Runtime environment. 
-- **Express.js** – Node.js framework to build APIs and handle requests easily.
-- **MongoDB + Mongoose** – Our NoSQL database.  
-- **JWT Authentication** – Secure login and route protection.  
-- **Bcrypt** – Password hashing.
-- **Cors** – Controls who can access your backend from the web.
+- **Node.js**: Runtime environment. 
+- **Express.js**: Node.js framework to build APIs and handle requests easily.
+- **MongoDB + Mongoose**: Our NoSQL database.  
+- **JWT Authentication**: Secure login and route protection.  
+- **Bcrypt**: Password hashing.
+- **Cors**: Controls who can access your backend from the web.
 
 ---
 
